@@ -40,6 +40,9 @@ if os.path.exists(LEGACY_DB_PATH) and not os.path.exists(DEFAULT_DB_PATH):
 
 DB_PATH = os.getenv("DB_PATH", DEFAULT_DB_PATH if os.path.exists(DEFAULT_DB_PATH) else LEGACY_DB_PATH)
 
+# Ensure the DB directory exists
+os.makedirs(DB_DIR, exist_ok=True)
+
 # ── Database helpers ────────────────────────────────────────────────────────
 
 def get_db_connection():
