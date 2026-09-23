@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mikey — Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css?v=30">
+  <script>
+    (function() {
+      try {
+        const v = localStorage.getItem('mikey_vibe') || localStorage.getItem('shadowcall_vibe');
+        const vibes = {
+          lovers: { primary: '#f43f5e', secondary: '#fb7185', gradient: 'linear-gradient(135deg, #f43f5e, #fda4af)', border: 'rgba(244, 63, 94, 0.3)', bubble: '#4c0519', bg: 'radial-gradient(circle at top center, rgba(244, 63, 94, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          friendship: { primary: '#f97316', secondary: '#ea580c', gradient: 'linear-gradient(135deg, #f97316, #fb923c)', border: 'rgba(249, 115, 22, 0.3)', bubble: '#431407', bg: 'radial-gradient(circle at top center, rgba(249, 115, 22, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          chill: { primary: '#0ea5e9', secondary: '#0284c7', gradient: 'linear-gradient(135deg, #0284c7, #38bdf8)', border: 'rgba(14, 165, 233, 0.3)', bubble: '#082f49', bg: 'radial-gradient(circle at top center, rgba(14, 165, 233, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          derry: { primary: '#a855f7', secondary: '#7c3aed', gradient: 'linear-gradient(135deg, #7c3aed, #a855f7)', border: 'rgba(168, 85, 247, 0.3)', bubble: '#2e1065', bg: 'radial-gradient(circle at top center, rgba(168, 85, 247, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          tron: { primary: '#00f2fe', secondary: '#0284c7', gradient: 'linear-gradient(135deg, #00f2fe, #4facfe)', border: 'rgba(0, 242, 254, 0.35)', bubble: '#042f2e', bg: 'radial-gradient(circle at top center, rgba(0, 242, 254, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          taylorshift: { primary: '#ec4899', secondary: '#db2777', gradient: 'linear-gradient(135deg, #e11d48, #ec4899)', border: 'rgba(236, 72, 153, 0.3)', bubble: '#500724', bg: 'radial-gradient(circle at top center, rgba(236, 72, 153, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          sunset: { primary: '#fb923c', secondary: '#f43f5e', gradient: 'linear-gradient(135deg, #fb923c, #f43f5e)', border: 'rgba(251, 146, 60, 0.3)', bubble: '#451a03', bg: 'radial-gradient(circle at top center, rgba(251, 146, 60, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          forest: { primary: '#10b981', secondary: '#059669', gradient: 'linear-gradient(135deg, #10b981, #0f766e)', border: 'rgba(16, 185, 129, 0.3)', bubble: '#064e3b', bg: 'radial-gradient(circle at top center, rgba(16, 185, 129, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          shadow: { primary: '#ff0055', secondary: '#cc0044', gradient: 'linear-gradient(135deg, #ff0055, #cc0044)', border: 'rgba(255, 0, 85, 0.3)', bubble: '#4d001a', bg: 'radial-gradient(circle at top center, rgba(153, 0, 0, 0.15) 0%, rgba(5, 5, 5, 1) 60%)' },
+          cyberpunk: { primary: '#facc15', secondary: '#eab308', gradient: 'linear-gradient(135deg, #facc15, #f59e0b)', border: 'rgba(250, 204, 21, 0.3)', bubble: '#422006', bg: 'radial-gradient(circle at top center, rgba(250, 204, 21, 0.14) 0%, rgba(5, 5, 5, 1) 60%)' }
+        };
+        if (v && vibes[v]) {
+          const c = vibes[v];
+          const r = document.documentElement;
+          r.style.setProperty('--accent-primary', c.primary);
+          r.style.setProperty('--accent-secondary', c.secondary);
+          r.style.setProperty('--accent-gradient', c.gradient);
+          r.style.setProperty('--panel-border', c.border);
+          r.style.setProperty('--user-bubble', c.bubble);
+          r.style.setProperty('--bg-gradient', c.bg);
+        }
+      } catch(e) {}
+    })();
+  </script>
+  <style>
+    body {
+      --accent-primary: #ff0055;
+      --accent-secondary: #cc0044;
+      --accent-gradient: linear-gradient(135deg, #ff0055, #cc0044);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --panel-bg: rgba(10, 10, 10, 0.8);
+      --panel-border: rgba(255, 0, 85, 0.3);
+      --glow-shadow: 0 0 16px rgba(255, 0, 85, 0.5);
+      font-family: 'Inter', sans-serif;
+      background: #050505;
+      background-image: var(--bg-gradient, radial-gradient(circle at top center, rgba(153, 0, 0, 0.15) 0%, rgba(5, 5, 5, 1) 60%));
+      color: var(--text-main);
+    }
+    /* Specific styles for Profile Page */
+    .profile-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .profile-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .profile-header h1 {
+      font-size: 2rem;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .profile-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    
+    .profile-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      padding: 40px;
+      width: 100%;
+      max-width: 450px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    .avatar-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      cursor: pointer;
+    }
+    .avatar-circle {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-primary);
+      box-shadow: 0 0 24px var(--panel-border);
+      transition: all 0.3s ease;
+    }
+    .avatar-upload span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    
+    .form-group {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .form-group input {
+      width: 100%;
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 14px 16px;
+      border-radius: 12px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .form-group input:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+    .btn-back {
+      flex: 1;
+      padding: 12px;
+      border-radius: 30px;
+      background: var(--accent-gradient, var(--accent-primary));
+      border: 1px solid var(--accent-primary);
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px var(--panel-border);
+    }
+    .btn-back:hover {
+      opacity: 0.9;
+      box-shadow: 0 6px 20px var(--panel-border);
+    }
+    .btn-logout {
+      flex: 1;
+      padding: 12px;
+      border-radius: 30px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .chat-link {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .chat-link:hover {
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="profile-container">
+      
+      <div class="profile-header">
+        <h1>My Profile</h1>
+        <p>Manage your account information</p>
+      </div>
+
+      <div class="profile-card">
+        
+        <div class="avatar-upload" onclick="document.getElementById('avatarInput').click()">
+          <div class="avatar-circle" id="avatarCircle">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <span id="avatarStatusText">Click to upload profile picture</span>
+          <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="uploadAvatar(event)">
+        </div>
+
+        <div class="form-group">
+          <label>NAME</label>
+          <input id="profileName" type="text" value="Loading..." readonly />
+        </div>
+
+        <div class="form-group">
+          <label>ACCOUNT ROLE</label>
+          <div id="roleBadge" style="display:flex; align-items:center; gap:8px; background:#111; border:1px solid var(--panel-border); padding:12px 16px; border-radius:12px; color:var(--text-main); font-size:0.95rem;">
+            <span id="roleIcon">👤</span> <span id="roleText">Loading role...</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>EMAIL</label>
+          <input id="profileEmail" type="text" value="Loading..." readonly />
+        </div>
+
+        <div class="profile-actions">
+          <button class="btn-back" onclick="window.location.href='/'">← Back to Chat</button>
+          <button class="btn-logout" onclick="handleLogout()">Logout</button>
+        </div>
+        
+        <a href="/" class="chat-link">Continue chatting with Mikey →</a>
+
+      </div>
+
+      <!-- Admin Panel Section (Only visible to admin) -->
+      <div id="adminSection" class="profile-card" style="display: none; margin-top: 30px; width: 100%; max-width: 550px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
+          <h2 style="font-size: 1.25rem; color: var(--accent-primary); margin:0;">🛡️ Admin Control Panel</h2>
+          <span style="font-size:0.75rem; background:rgba(255,255,255,0.08); border:1px solid var(--panel-border); color:var(--accent-primary); padding:4px 8px; border-radius:12px; font-weight:600;">ADMIN</span>
+        </div>
+
+        <div style="width:100%; margin-bottom:24px;">
+          <h3 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; font-weight:600; letter-spacing:1px;">ADD NEW USER</h3>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <input type="text" id="adminNewUsername" placeholder="Username" style="flex:1; min-width:130px; background:#111; border:1px solid rgba(255,255,255,0.1); padding:10px 14px; border-radius:10px; color:#fff; font-size:0.9rem; outline:none;" />
+            <input type="password" id="adminNewPassword" placeholder="Password" style="flex:1; min-width:130px; background:#111; border:1px solid rgba(255,255,255,0.1); padding:10px 14px; border-radius:10px; color:#fff; font-size:0.9rem; outline:none;" />
+            <button onclick="adminAddUser()" style="background:var(--accent-primary); border:none; color:#fff; padding:10px 16px; border-radius:10px; font-weight:600; cursor:pointer;">+ Add</button>
+          </div>
+          <div id="adminUserStatus" style="font-size:0.85rem; margin-top:8px;"></div>
+        </div>
+
+        <!-- Pending Registration Requests Section -->
+        <div style="width:100%; margin-bottom:24px;">
+          <h3 style="font-size: 0.9rem; color: #f59e0b; margin-bottom: 10px; font-weight:600; letter-spacing:1px; display:flex; align-items:center; gap:6px;">
+            <span>⏳ PENDING REGISTRATION REQUESTS</span>
+            <span id="pendingCountBadge" style="background:#f59e0b; color:#000; font-size:0.75rem; padding:2px 6px; border-radius:10px; font-weight:700;">0</span>
+          </h3>
+          <div id="adminPendingList" style="display:flex; flex-direction:column; gap:8px; max-height:180px; overflow-y:auto; width:100%;">
+            <!-- Pending Users injected here -->
+          </div>
+        </div>
+
+        <div style="width:100%;">
+          <h3 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; font-weight:600; letter-spacing:1px;">APPROVED ACTIVE USERS</h3>
+          <div id="adminUserList" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto; width:100%;">
+            <!-- Approved Users injected here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin User Chats Modal -->
+  <div id="adminChatsModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; padding:20px;">
+    <div style="background:var(--panel-bg); border:1px solid var(--panel-border); border-radius:24px; width:100%; max-width:600px; max-height:80vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.8);">
+      <div style="padding:20px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+        <h2 id="adminChatsTitle" style="font-size:1.2rem; color:var(--text-main); margin:0;">User Chats</h2>
+        <button onclick="document.getElementById('adminChatsModal').style.display='none'" style="background:none; border:none; color:var(--text-muted); font-size:1.5rem; cursor:pointer;">&times;</button>
+      </div>
+      <div id="adminChatsContent" style="padding:20px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:12px;">
+         <!-- Threads or messages will be injected here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadProfile() {
+      try {
+        const resMe = await fetch('/me');
+        if (resMe.ok) {
+          const dataMe = await resMe.json();
+          document.getElementById('profileName').value = dataMe.username;
+          document.getElementById('profileEmail').value = dataMe.username + '@mikey.ai';
+          
+          if (dataMe.is_admin) {
+            document.getElementById('roleIcon').textContent = "🛡️";
+            document.getElementById('roleText').innerHTML = "<strong style='color:var(--accent-primary);'>System Administrator</strong> <span style='font-size:0.75rem; background:var(--panel-border); color:var(--accent-primary); padding:2px 8px; border-radius:10px; font-weight:700; margin-left:6px;'>ADMIN</span>";
+            document.getElementById('adminSection').style.display = 'flex';
+            loadAdminUsers();
+          } else {
+            document.getElementById('roleIcon').textContent = "👤";
+            document.getElementById('roleText').innerHTML = "<span>Standard User</span> <span style='font-size:0.75rem; background:rgba(255,255,255,0.1); color:#aaa; padding:2px 8px; border-radius:10px; margin-left:6px;'>USER</span>";
+            document.getElementById('adminSection').style.display = 'none';
+          }
+
+          // Try to load avatar
+          const avatarImg = new Image();
+          avatarImg.onload = function() {
+            document.getElementById('avatarCircle').innerHTML = `<img src="${this.src}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+          };
+          avatarImg.src = `/static/avatars/${dataMe.username}.jpg?v=${Date.now()}`;
+        }
+      } catch (e) {
+        console.error('Failed to load profile', e);
+      }
+    }
+
+    async function loadAdminUsers() {
+      try {
+        const res = await fetch('/admin/users');
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        const pendingList = document.getElementById('adminPendingList');
+        const approvedList = document.getElementById('adminUserList');
+        const badge = document.getElementById('pendingCountBadge');
+        
+        const pending = (data.users || []).filter(u => !u.is_approved);
+        const approved = (data.users || []).filter(u => u.is_approved);
+        
+        if (badge) badge.textContent = pending.length;
+        
+        // Render Pending Requests
+        if (!pending.length) {
+          pendingList.innerHTML = '<div style="color:var(--text-muted); font-size:0.85rem; padding:8px 0;">No pending requests.</div>';
+        } else {
+          pendingList.innerHTML = pending.map(u => `
+            <div style="background:rgba(245, 158, 11, 0.08); border:1px solid rgba(245, 158, 11, 0.3); border-radius:12px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="color:#f59e0b; font-size:0.95rem;">👤 ${u.username}</strong>
+                <span style="font-size:0.75rem; color:#f59e0b; margin-left:6px; font-weight:600;">[PENDING]</span>
+                <div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">Requested: ${new Date(u.created_at).toLocaleDateString()}</div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button onclick="adminApproveUser(${u.id}, '${u.username}')" style="background:#10b981; border:none; color:#fff; padding:6px 12px; border-radius:8px; font-size:0.8rem; cursor:pointer; font-weight:600;">Accept ✓</button>
+                <button onclick="adminDeleteUser(${u.id}, '${u.username}')" style="background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#ef4444; padding:6px 10px; border-radius:8px; font-size:0.8rem; cursor:pointer; font-weight:500;">Reject</button>
+              </div>
+            </div>
+          `).join('');
+        }
+        
+        if (!approved.length) {
+          approvedList.innerHTML = '<div style="color:var(--text-muted); font-size:0.85rem;">No active approved users.</div>';
+        } else {
+          approvedList.innerHTML = approved.map(u => `
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="color:var(--text-main); font-size:0.9rem;">${u.username}</strong>
+                ${u.is_admin ? '<span style="font-size:0.75rem; color:var(--accent-primary); margin-left:8px; font-weight:600;">[ADMIN]</span>' : ''}
+                <div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">Joined: ${new Date(u.created_at).toLocaleDateString()}</div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button onclick="adminViewUserChats(${u.id}, '${u.username}')" style="background:rgba(52,211,153,0.15); border:1px solid rgba(52,211,153,0.3); color:#34d399; padding:6px 12px; border-radius:8px; font-size:0.8rem; cursor:pointer; font-weight:500;">View Chats</button>
+                ${!u.is_admin ? `<button onclick="adminDeleteUser(${u.id}, '${u.username}')" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#ef4444; padding:6px 12px; border-radius:8px; font-size:0.8rem; cursor:pointer; font-weight:500;">Delete</button>` : ''}
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        console.error('Failed to load admin users', e);
+      }
+    }
+
+    async function adminApproveUser(userId, username) {
+      try {
+        const res = await fetch(`/admin/users/${userId}/approve`, { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+          loadAdminUsers();
+        } else {
+          alert(data.detail || 'Failed to approve user.');
+        }
+      } catch (e) {
+        alert('Error approving user.');
+      }
+    }
+
+    async function adminAddUser() {
+      const username = document.getElementById('adminNewUsername').value.trim();
+      const password = document.getElementById('adminNewPassword').value;
+      const statusDiv = document.getElementById('adminUserStatus');
+      if (!username || !password) {
+        statusDiv.style.color = '#ef4444';
+        statusDiv.textContent = 'Please enter username and password.';
+        return;
+      }
+      try {
+        const res = await fetch('/admin/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          statusDiv.style.color = '#34d399';
+          statusDiv.textContent = data.message || 'User added successfully!';
+          document.getElementById('adminNewUsername').value = '';
+          document.getElementById('adminNewPassword').value = '';
+          loadAdminUsers();
+        } else {
+          statusDiv.style.color = '#ef4444';
+          statusDiv.textContent = data.detail || 'Failed to add user.';
+        }
+      } catch (e) {
+        statusDiv.style.color = '#ef4444';
+        statusDiv.textContent = 'Error adding user.';
+      }
+    }
+
+    async function adminDeleteUser(userId, username) {
+      if (!confirm(`Are you sure you want to delete user '${username}'?`)) return;
+      try {
+        const res = await fetch(`/admin/users/${userId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (res.ok) {
+          loadAdminUsers();
+        } else {
+          alert(data.detail || 'Failed to delete user.');
+        }
+      } catch (e) {
+        alert('Error deleting user.');
+      }
+    }
+    
+    async function adminViewUserChats(userId, username) {
+      document.getElementById('adminChatsModal').style.display = 'flex';
+      const titleEl = document.getElementById('adminChatsTitle');
+      titleEl.textContent = `Chats for ${username}`;
+      titleEl.dataset.username = username;
+      const content = document.getElementById('adminChatsContent');
+      content.innerHTML = '<div style="color:var(--text-muted); text-align:center;">Loading threads...</div>';
+      
+      try {
+        const res = await fetch(`/admin/users/${userId}/threads`);
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        
+        if (!data.threads || data.threads.length === 0) {
+          content.innerHTML = '<div style="color:var(--text-muted); text-align:center;">No recent chats found.</div>';
+          return;
+        }
+        
+        content.innerHTML = data.threads.map(t => `
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:14px; border-radius:12px; cursor:pointer;" onclick="adminViewUserThread(${userId}, '${t.id}', '${t.title.replace(/'/g, "\\'")}')">
+            <strong style="color:var(--text-main); font-size:0.95rem; display:block; margin-bottom:4px;">${t.title}</strong>
+            <span style="color:var(--text-muted); font-size:0.75rem;">Updated: ${new Date(t.updated_at).toLocaleString()}</span>
+          </div>
+        `).join('');
+      } catch (e) {
+        content.innerHTML = '<div style="color:#ef4444; text-align:center;">Error loading chats.</div>';
+      }
+    }
+
+    async function adminViewUserThread(userId, threadId, threadTitle) {
+      const content = document.getElementById('adminChatsContent');
+      content.innerHTML = '<div style="color:var(--text-muted); text-align:center;">Loading messages...</div>';
+      const titleEl = document.getElementById('adminChatsTitle');
+      titleEl.innerHTML = `
+        <button onclick="adminViewUserChats(${userId}, document.getElementById('adminChatsTitle').dataset.username)" style="background:none; border:none; color:var(--accent-primary); font-size:0.9rem; cursor:pointer; margin-right:10px; font-weight:bold;">&larr; Back</button>
+        ${threadTitle}
+      `;
+      
+      try {
+        const res = await fetch(`/admin/users/${userId}/threads/${threadId}`);
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        
+        if (!data.messages || data.messages.length === 0) {
+          content.innerHTML = '<div style="color:var(--text-muted); text-align:center;">No messages in this thread.</div>';
+          return;
+        }
+        
+        content.innerHTML = data.messages.map(m => {
+          const isUser = m.role === 'user';
+          return `
+            <div style="margin-bottom:12px; max-width:85%; align-self:${isUser ? 'flex-end' : 'flex-start'};">
+              <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:4px; text-align:${isUser ? 'right' : 'left'};">${isUser ? 'User' : 'AI'}</div>
+              <div style="background:${isUser ? 'var(--user-bubble)' : '#1a1a1a'}; border:1px solid ${isUser ? 'var(--panel-border)' : 'rgba(255,255,255,0.05)'}; padding:10px 14px; border-radius:${isUser ? '16px 16px 4px 16px' : '16px 16px 16px 4px'}; color:var(--text-main); font-size:0.9rem; white-space:pre-wrap;">${m.content}</div>
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        content.innerHTML = '<div style="color:#ef4444; text-align:center;">Error loading messages.</div>';
+      }
+    }
+    
+    async function uploadAvatar(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const statusText = document.getElementById('avatarStatusText');
+      statusText.textContent = "Uploading...";
+      statusText.style.color = "var(--text-main)";
+      
+      try {
+        const res = await fetch('/api/upload-avatar', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          statusText.textContent = "Avatar updated!";
+          statusText.style.color = "#34d399";
+          document.getElementById('avatarCircle').innerHTML = `<img src="${data.avatarUrl}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+        } else {
+          statusText.textContent = "Upload failed.";
+          statusText.style.color = "#ef4444";
+        }
+      } catch (e) {
+        statusText.textContent = "Error uploading.";
+        statusText.style.color = "#ef4444";
+      }
+    }
+    
+    async function handleLogout() {
+      try {
+        await fetch('/logout', { method: 'POST' });
+        window.location.href = '/static/login.html';
+      } catch (e) {
+        window.location.href = '/static/login.html';
+      }
+    }
+    
+    window.onload = loadProfile;
+  </script>
+</body>
+</html>

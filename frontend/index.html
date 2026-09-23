@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mikey — Premium Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/static/style.css?v=31">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  (function() {
+    try {
+      const v = localStorage.getItem('mikey_vibe') || localStorage.getItem('shadowcall_vibe');
+      const vibes = {
+        lovers: { primary: '#f43f5e', secondary: '#fb7185', gradient: 'linear-gradient(135deg, #f43f5e, #fda4af)', border: 'rgba(244, 63, 94, 0.3)', bubble: '#4c0519', bg: 'radial-gradient(circle at top center, rgba(244, 63, 94, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+        friendship: { primary: '#f97316', secondary: '#ea580c', gradient: 'linear-gradient(135deg, #f97316, #fb923c)', border: 'rgba(249, 115, 22, 0.3)', bubble: '#431407', bg: 'radial-gradient(circle at top center, rgba(249, 115, 22, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+        chill: { primary: '#0ea5e9', secondary: '#0284c7', gradient: 'linear-gradient(135deg, #0284c7, #38bdf8)', border: 'rgba(14, 165, 233, 0.3)', bubble: '#082f49', bg: 'radial-gradient(circle at top center, rgba(14, 165, 233, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+        derry: { primary: '#a855f7', secondary: '#7c3aed', gradient: 'linear-gradient(135deg, #7c3aed, #a855f7)', border: 'rgba(168, 85, 247, 0.3)', bubble: '#2e1065', bg: 'radial-gradient(circle at top center, rgba(168, 85, 247, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+        tron: { primary: '#00f2fe', secondary: '#0284c7', gradient: 'linear-gradient(135deg, #00f2fe, #4facfe)', border: 'rgba(0, 242, 254, 0.35)', bubble: '#042f2e', bg: 'radial-gradient(circle at top center, rgba(0, 242, 254, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+        taylorshift: { primary: '#ec4899', secondary: '#db2777', gradient: 'linear-gradient(135deg, #e11d48, #ec4899)', border: 'rgba(236, 72, 153, 0.3)', bubble: '#500724', bg: 'radial-gradient(circle at top center, rgba(236, 72, 153, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+        sunset: { primary: '#fb923c', secondary: '#f43f5e', gradient: 'linear-gradient(135deg, #fb923c, #f43f5e)', border: 'rgba(251, 146, 60, 0.3)', bubble: '#451a03', bg: 'radial-gradient(circle at top center, rgba(251, 146, 60, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+        forest: { primary: '#10b981', secondary: '#059669', gradient: 'linear-gradient(135deg, #10b981, #0f766e)', border: 'rgba(16, 185, 129, 0.3)', bubble: '#064e3b', bg: 'radial-gradient(circle at top center, rgba(16, 185, 129, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+        shadow: { primary: '#ff0055', secondary: '#cc0044', gradient: 'linear-gradient(135deg, #ff0055, #cc0044)', border: 'rgba(255, 0, 85, 0.3)', bubble: '#4d001a', bg: 'radial-gradient(circle at top center, rgba(153, 0, 0, 0.15) 0%, rgba(5, 5, 5, 1) 60%)' },
+        cyberpunk: { primary: '#facc15', secondary: '#eab308', gradient: 'linear-gradient(135deg, #facc15, #f59e0b)', border: 'rgba(250, 204, 21, 0.3)', bubble: '#422006', bg: 'radial-gradient(circle at top center, rgba(250, 204, 21, 0.14) 0%, rgba(5, 5, 5, 1) 60%)' }
+      };
+      if (v && vibes[v]) {
+        const c = vibes[v];
+        const r = document.documentElement;
+        r.style.setProperty('--accent-primary', c.primary);
+        r.style.setProperty('--accent-secondary', c.secondary);
+        r.style.setProperty('--accent-gradient', c.gradient);
+        r.style.setProperty('--panel-border', c.border);
+        r.style.setProperty('--user-bubble', c.bubble);
+        r.style.setProperty('--bg-gradient', c.bg);
+      }
+    } catch(e) {}
+  })();
+</script>
+</head>
+<body>
+
+<div class="page-shell">
+
+  <header class="header" style="position: relative; z-index: 9999;">
+    <div class="brand-area" style="gap: 16px; position: relative; z-index: 9999;">
+      <!-- Hamburger Menu -->
+      <button class="icon-btn" aria-label="Menu" onclick="toggleSidebar()" style="position: relative; z-index: 9999; cursor: pointer; pointer-events: auto;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none;"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+    
+    <h1 class="brand-title">Mikey</h1>
+    
+    <div class="header-actions">
+      <!-- Hidden buttons to prevent JS crash -->
+      <div style="display: none;">
+
+        <button id="themeCyan"></button>
+        <button id="themeViolet"></button>
+        <button id="themeEmerald"></button>
+        <!-- Prevent JS crash -->
+        <div id="adminStats"></div>
+        <div id="analyticsList"></div>
+        <div id="voiceSettingDesc"></div>
+        <input id="reminderTitle" />
+        <input id="reminderTime" />
+        <textarea id="reminderDescription"></textarea>
+        <div id="reminderStatus"></div>
+        <div id="reminderList"></div>
+      </div>
+      <!-- Choose Your Vibe Button -->
+      <button id="vibeBtn" class="vibe-header-btn" onclick="openVibeModal()" title="Choose Your Vibe" aria-label="Choose Your Vibe">
+        <span class="vibe-preview-dot"></span>
+        <span class="vibe-header-text">Vibe</span>
+      </button>
+      <!-- Profile Button -->
+      <button id="headerProfileBtn" class="icon-btn" aria-label="Profile" onclick="window.location.href='/static/profile.html'" style="border-radius: 50%; overflow: hidden;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="app-container">
+
+  <aside class="left-sidebar" id="historySidebar">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button onclick="toggleSidebar()" style="background:transparent; border:none; color:var(--text-main); cursor:pointer; padding:4px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <h3 style="margin:0; font-size:1.05rem; font-weight:600; color:var(--text-main);">RECENTS</h3>
+      </div>
+      <button class="clear-all-btn" onclick="clearAllHistory()" title="Clear All History">Clear All</button>
+    </div>
+    <button class="btn-primary" style="flex: 0 0 75px; height: 75px; min-height: 75px; max-height: 75px; font-size: 1.05rem; display: flex; align-items: center; justify-content: center;" onclick="newChat()">+ New Chat</button>
+    <input type="text" id="historySearch" class="history-search" placeholder="🔍 Search conversations..." oninput="renderHistory()" />
+    <div id="threadList" style="min-height: 150px; max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; margin-bottom: 24px;">
+      <!-- Threads injected here -->
+    </div>
+
+
+
+    <!-- System Status -->
+    <div class="sidebar-widget" style="margin-bottom: 24px;">
+      <div class="widget-header" style="display:flex; justify-content:space-between; margin-bottom:12px;">
+        <span style="font-size:0.75rem; letter-spacing:2px; color:#888;">SYSTEM STATUS</span>
+        <span style="font-size:0.75rem; letter-spacing:1px; color:var(--accent-primary); font-weight:600;">ACTIVE</span>
+      </div>
+      <div style="border-top:1px solid #222; padding:12px 0; display:flex; justify-content:space-between;">
+        <span style="color:#aaa; font-size:0.9rem;">Mode</span>
+        <span style="color:#fff; font-size:0.9rem; font-family: monospace;">Command Deck</span>
+      </div>
+      <div style="border-top:1px solid #222; padding:12px 0; display:flex; justify-content:space-between;">
+        <span style="color:#aaa; font-size:0.9rem;">Language</span>
+        <span style="color:#fff; font-size:0.9rem; display:flex; gap:12px; font-family: monospace;">
+          <button id="btnEN" class="lang-btn active" onclick="setLang('en')" style="background:transparent; border:none; cursor:pointer;">English</button>
+          <button id="btnTE" class="lang-btn" onclick="setLang('te')" style="background:transparent; border:none; cursor:pointer;">Telugu</button>
+        </span>
+      </div>
+      <div style="border-top:1px solid #222; padding:12px 0; display:flex; justify-content:space-between; align-items:center;">
+      <span style="color:#aaa; font-size:0.9rem;">Voice output</span>
+      <label class="toggle" style="transform: scale(0.8); margin: 0;"><input type="checkbox" id="ttsToggle" checked /><span class="slider"></span></label>
+    </div>
+    <div style="border-top:1px solid #222; padding:12px 0; display:flex; justify-content:space-between; align-items:center;">
+      <span style="color:#aaa; font-size:0.9rem;">Voice speed</span>
+      <select id="speechRateSelect" style="background: #111; color: #fff; border: 1px solid #333; border-radius: 4px; padding: 4px 8px; outline: none; cursor: pointer;">
+        <option value="0.25">0.25x</option>
+        <option value="0.5">0.50x</option>
+        <option value="0.75">0.75x</option>
+        <option value="1.0" selected>1.00x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.50x</option>
+        <option value="1.75">1.75x</option>
+        <option value="2.0">2.00x</option>
+      </select>
+    </div>
+    <div style="border-top:1px solid #222; border-bottom:1px solid #222; padding:12px 0; display:flex; justify-content:space-between; align-items:center;">
+      <span style="color:#aaa; font-size:0.9rem;">Vibe</span>
+      <button onclick="openVibeModal()" class="sidebar-vibe-btn" title="Choose Your Vibe">
+        <span class="vibe-preview-dot" style="width:8px; height:8px; border-radius:50%; background:var(--accent-primary); display:inline-block; box-shadow:0 0 8px var(--accent-primary);"></span>
+        <span id="sidebarVibeName">Shadow</span>
+      </button>
+    </div>
+  </div>
+
+    <!-- Weather Scan -->
+    <div class="sidebar-widget" style="margin-bottom: 24px;">
+      <div class="widget-header" style="display:flex; justify-content:space-between; margin-bottom:12px;">
+        <span style="font-size:0.75rem; letter-spacing:2px; color:#888;">WEATHER SCAN</span>
+        <span style="font-size:0.75rem; letter-spacing:1px; color:var(--accent-primary); font-weight:600;">REAL-TIME</span>
+      </div>
+      <div style="border-top:1px solid #222; padding-top:12px;">
+        <input id="cityInput" type="text" placeholder="Enter city name" style="width:100%; background:#050505; border:1px solid #222; padding:12px; color:#fff; border-radius:6px; margin-bottom:12px; outline:none; font-family: monospace;" onkeydown="if(event.key==='Enter')getWeather()" />
+        <button onclick="getWeather()" style="width:100%; background:var(--accent-gradient, var(--accent-primary)); border:none; color:#fff; padding:12px; border-radius:6px; font-weight:600; cursor:pointer; box-shadow:0 4px 14px var(--panel-border);">Fetch weather</button>
+      </div>
+      <div id="weatherResult" style="display:none; margin-top:16px;">
+        <div class="weather-main">
+          <div>
+            <div class="wx-city" id="wxCity">City</div>
+            <div class="wx-desc" id="wxDesc">Conditions</div>
+            <div class="wx-temp" id="wxTemp">--°</div>
+          </div>
+          <div class="wx-icon" id="wxIcon">☀️</div>
+        </div>
+        <div class="weather-stats">
+          <div class="wx-stat"><span>Feels Like</span><strong id="wxFeels">--</strong></div>
+          <div class="wx-stat"><span>Humidity</span><strong id="wxHumid">--</strong></div>
+          <div class="wx-stat"><span>Wind</span><strong id="wxWind">--</strong></div>
+          <div class="wx-stat"><span>Country</span><strong id="wxCountry">--</strong></div>
+        </div>
+      </div>
+    </div>
+    <!-- Document Analysis -->
+    <div class="sidebar-widget" style="margin-bottom: 24px;">
+      <div class="widget-header" style="display:flex; justify-content:space-between; margin-bottom:12px;">
+        <span style="font-size:0.75rem; letter-spacing:2px; color:#888;">DOCUMENT ANALYSIS</span>
+        <span style="font-size:0.75rem; letter-spacing:1px; color:var(--accent-primary); font-weight:600;">KNOWLEDGE</span>
+      </div>
+      <div style="border-top:1px solid #222; padding-top:12px;">
+        <input type="file" id="docUpload" onchange="uploadDocument()" style="width:100%; background:#050505; border:1px solid #222; padding:8px; color:#fff; border-radius:6px; margin-bottom:12px; outline:none; font-family: monospace; font-size: 0.8rem;" />
+        <button onclick="analyzeDocument()" style="width:100%; background:rgba(255, 255, 255, 0.05); border:1px solid var(--accent-primary); color:var(--text-main); padding:12px; border-radius:6px; font-weight:600; cursor:pointer; margin-bottom: 12px; transition: all 0.2s;">Analyze Documents</button>
+        <div id="knowledgeOutput" style="font-size: 0.8rem; color: #aaa; text-align: center; margin-bottom: 12px;"></div>
+        <div id="documentList" style="max-height: 100px; overflow-y: auto; font-size: 0.8rem;"></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="chat-container glass-panel">
+    <div class="chat-header">
+      <div>
+        <h2 style="display: block; font-size: 1.8rem; text-align: center;">Hi, this is Mikey</h2>
+        <span id="langLabel" style="display: block; text-align: center; color:var(--text-muted); font-size:0.95rem; margin-top:8px;">Executive AI Command Center</span>
+      </div>
+      <div class="features-chips" style="display: none; align-items:center;">
+        <select id="personaSelect" class="auth-input" style="padding:6px 10px; font-size:0.85rem; background:rgba(255,255,255,0.05); border-radius:10px; cursor:pointer;" onchange="savePreferences()" title="Select AI Persona Mode">
+          <option value="executive">✦ Executive Persona</option>
+          <option value="technical">⚙️ Technical Persona</option>
+          <option value="creative">💡 Creative Persona</option>
+        </select>
+        <button class="btn-secondary" style="padding:6px 12px; font-size:0.85rem; border-radius:10px; cursor:pointer;" onclick="openVisionKeyModal()" title="Configure Free Gemini AI Vision Key">🔑 Vision Key</button>
+        <button class="btn-secondary" style="padding:6px 12px; font-size:0.85rem; border-radius:10px; cursor:pointer;" onclick="exportChat()" title="Export Active Conversation Markdown">📥 Export</button>
+        <div class="chip">Voice Ready</div>
+      </div>
+    </div>
+    
+    <div class="messages-area" id="messages">
+      <!-- Messages injected here -->
+    </div>
+
+    <div class="input-area">
+      
+      <div class="image-preview-container" id="imgPreviewContainer">
+        <img id="imgPreview" src="" alt="Preview" />
+        <button class="remove-img-btn" onclick="removeImage()">×</button>
+      </div>
+
+      <div style="display: flex; justify-content: center; margin-bottom: 12px;">
+        <select id="toneSelect" style="background: rgba(10, 10, 10, 0.9); color: var(--text-main); border: 1px solid var(--accent-primary); border-radius: 20px; padding: 6px 16px; font-size: 0.9rem; outline: none; cursor: pointer; text-align: center; appearance: none; -webkit-appearance: none;">
+          <option value="dynamic">✨ Dynamic Tone Matching (Auto)</option>
+          <option value="friendly">😊 Friendly & Casual</option>
+          <option value="professional">👔 Strict Professional</option>
+          <option value="normal">😐 Normal / Standard</option>
+        </select>
+      </div>
+
+      <!-- Voice Status Pill -->
+      <div id="voiceStatusPill" class="voice-status-pill" style="display:none;">
+        <span id="voiceStatusDot" class="voice-status-dot"></span>
+        <span id="voiceStatusText">Listening...</span>
+      </div>
+
+      <div class="input-wrapper">
+        <input type="file" id="imageUpload" accept="image/*" style="display:none;" onchange="handleImageSelect(event)" />
+        <button class="action-btn" id="imgBtn" onclick="document.getElementById('imageUpload').click()" title="Attach Image" style="font-size: 1.2rem;">
+          +
+        </button>
+
+        <textarea id="chatInput" rows="1" placeholder="Enter here..." onkeydown="handleChatKeyDown(event)" oninput="autoResizeChatInput()"></textarea>
+
+        <button class="action-btn" id="voiceBtn" onclick="toggleVoice()" title="Voice Input">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+        </button>
+        <button class="action-btn send-btn" onclick="sendMessage()" title="Send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+      <div style="display:none;" id="voiceLabel">Voice Input</div>
+    </div>
+  </main>
+
+</div><!-- /.app-container -->
+</div><!-- /.page-shell -->
+
+<script src="/static/script.js?v=12"></script>
+
+<div id="visionModal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center;">
+  <div class="glass-panel" style="background:#0f172a; padding:28px; border-radius:16px; width:90%; max-width:500px; border:1px solid var(--accent); box-shadow:0 0 40px rgba(0,242,254,0.3);">
+    <h3 style="margin-top:0; color:var(--accent); display:flex; align-items:center; gap:8px;">🔑 Activate Gemini AI Vision Engine</h3>
+    <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.6; margin-bottom:12px;">To enable instant AI recognition for any image (recognizing Spider-Man, characters, text, objects, logos & scenes), enter your free Google Gemini API key below:</p>
+    <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#34d399; font-size:0.88rem; text-decoration:underline; font-weight:600; display:inline-block; margin-bottom:16px;">👉 Click here to get a 100% Free Gemini API Key from Google AI Studio</a>
+    <input type="password" id="geminiKeyInput" class="auth-input" placeholder="Paste your API Key (e.g. AIzaSy...)" style="width:100%; margin-bottom:16px; padding:12px;" />
+    <div style="display:flex; gap:12px; justify-content:flex-end;">
+      <button class="btn-secondary" onclick="closeVisionKeyModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveGeminiKey()">Activate Vision</button>
+    </div>
+    <div id="visionKeyStatus" style="margin-top:14px; font-size:0.88rem; font-weight:600;"></div>
+  </div>
+</div>
+
+<!-- Choose Your Vibe Modal -->
+<div id="vibeModal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); z-index:99999; align-items:center; justify-content:center;" onclick="if(event.target===this)closeVibeModal()">
+  <div class="vibe-modal-panel">
+    <div class="vibe-modal-header">
+      <button class="vibe-back-btn" onclick="closeVibeModal()" title="Back" aria-label="Back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <h3 class="vibe-modal-title">Choose Your Vibe</h3>
+      <div style="width: 36px;"></div>
+    </div>
+    <div class="vibe-grid" id="vibeGrid">
+      <!-- Injected by script.js -->
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  function toggleSidebar() {
+    console.log('Hamburger clicked!');
+    const sb = document.getElementById('historySidebar');
+    if (sb) {
+      sb.classList.toggle('show-sidebar');
+      console.log('Sidebar toggled. Current class:', sb.className);
+    } else {
+      console.error('Sidebar element not found!');
+    }
+  }
+</script>
+</body>
+</html>

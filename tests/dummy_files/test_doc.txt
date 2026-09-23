@@ -1,0 +1,1 @@
+Shadowcall AI is an executive AI assistant created in 2026. It features voice input, text-to-speech, weather data, document analysis, and chat memory.

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mikey — Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css?v=30">
+  <script>
+    (function() {
+      try {
+        const v = localStorage.getItem('mikey_vibe') || localStorage.getItem('shadowcall_vibe');
+        const vibes = {
+          lovers: { primary: '#f43f5e', secondary: '#fb7185', gradient: 'linear-gradient(135deg, #f43f5e, #fda4af)', border: 'rgba(244, 63, 94, 0.3)', bubble: '#4c0519', bg: 'radial-gradient(circle at top center, rgba(244, 63, 94, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          friendship: { primary: '#f97316', secondary: '#ea580c', gradient: 'linear-gradient(135deg, #f97316, #fb923c)', border: 'rgba(249, 115, 22, 0.3)', bubble: '#431407', bg: 'radial-gradient(circle at top center, rgba(249, 115, 22, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          chill: { primary: '#0ea5e9', secondary: '#0284c7', gradient: 'linear-gradient(135deg, #0284c7, #38bdf8)', border: 'rgba(14, 165, 233, 0.3)', bubble: '#082f49', bg: 'radial-gradient(circle at top center, rgba(14, 165, 233, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          derry: { primary: '#a855f7', secondary: '#7c3aed', gradient: 'linear-gradient(135deg, #7c3aed, #a855f7)', border: 'rgba(168, 85, 247, 0.3)', bubble: '#2e1065', bg: 'radial-gradient(circle at top center, rgba(168, 85, 247, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          tron: { primary: '#00f2fe', secondary: '#0284c7', gradient: 'linear-gradient(135deg, #00f2fe, #4facfe)', border: 'rgba(0, 242, 254, 0.35)', bubble: '#042f2e', bg: 'radial-gradient(circle at top center, rgba(0, 242, 254, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          taylorshift: { primary: '#ec4899', secondary: '#db2777', gradient: 'linear-gradient(135deg, #e11d48, #ec4899)', border: 'rgba(236, 72, 153, 0.3)', bubble: '#500724', bg: 'radial-gradient(circle at top center, rgba(236, 72, 153, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          sunset: { primary: '#fb923c', secondary: '#f43f5e', gradient: 'linear-gradient(135deg, #fb923c, #f43f5e)', border: 'rgba(251, 146, 60, 0.3)', bubble: '#451a03', bg: 'radial-gradient(circle at top center, rgba(251, 146, 60, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          forest: { primary: '#10b981', secondary: '#059669', gradient: 'linear-gradient(135deg, #10b981, #0f766e)', border: 'rgba(168, 185, 129, 0.3)', bubble: '#064e3b', bg: 'radial-gradient(circle at top center, rgba(16, 185, 129, 0.18) 0%, rgba(5, 5, 5, 1) 60%)' },
+          shadow: { primary: '#ff0055', secondary: '#cc0044', gradient: 'linear-gradient(135deg, #ff0055, #cc0044)', border: 'rgba(255, 0, 85, 0.3)', bubble: '#4d001a', bg: 'radial-gradient(circle at top center, rgba(153, 0, 0, 0.15) 0%, rgba(5, 5, 5, 1) 60%)' },
+          cyberpunk: { primary: '#facc15', secondary: '#eab308', gradient: 'linear-gradient(135deg, #facc15, #f59e0b)', border: 'rgba(250, 204, 21, 0.3)', bubble: '#422006', bg: 'radial-gradient(circle at top center, rgba(250, 204, 21, 0.14) 0%, rgba(5, 5, 5, 1) 60%)' }
+        };
+        if (v && vibes[v]) {
+          const c = vibes[v];
+          const r = document.documentElement;
+          r.style.setProperty('--accent-primary', c.primary);
+          r.style.setProperty('--accent-secondary', c.secondary);
+          r.style.setProperty('--accent-gradient', c.gradient);
+          r.style.setProperty('--panel-border', c.border);
+          r.style.setProperty('--user-bubble', c.bubble);
+          r.style.setProperty('--bg-gradient', c.bg);
+        }
+      } catch(e) {}
+    })();
+  </script>
+  <style>
+    body {
+      --accent-primary: #ff0055;
+      --accent-secondary: #cc0044;
+      --accent-gradient: linear-gradient(135deg, #ff0055, #cc0044);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --panel-bg: rgba(10, 10, 10, 0.8);
+      --panel-border: rgba(255, 0, 85, 0.3);
+      --glow-shadow: 0 0 16px rgba(255, 0, 85, 0.5);
+      font-family: 'Inter', sans-serif;
+      background: #050505;
+      background-image: var(--bg-gradient, radial-gradient(circle at top center, rgba(153, 0, 0, 0.15) 0%, rgba(5, 5, 5, 1) 60%));
+      color: var(--text-main);
+    }
+    /* Specific styles for Login Page */
+    .welcome-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .welcome-title {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      margin-bottom: 12px;
+      text-shadow: 0 0 20px var(--panel-border);
+    }
+    .welcome-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+    .auth-actions {
+      display: flex;
+      gap: 16px;
+    }
+    .btn-login {
+      padding: 12px 32px;
+      border-radius: 30px;
+      background: var(--accent-gradient, var(--accent-primary));
+      border: 1px solid var(--accent-primary);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px var(--panel-border);
+    }
+    .btn-login:hover {
+      opacity: 0.9;
+      box-shadow: 0 6px 20px var(--panel-border);
+    }
+    .btn-register {
+      padding: 12px 32px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-register:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="welcome-container">
+      <h1 class="welcome-title">Welcome to Mikey</h1>
+
+      <div class="auth-actions" style="flex-direction: column; width: 100%; max-width: 320px; gap: 12px;">
+        
+        <!-- Logins Role Switcher Dropdown -->
+        <div style="width: 100%; text-align: left; margin-bottom: 4px;">
+          <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1px; display: block; margin-bottom: 6px;">LOGIN MODE</label>
+          <select id="loginRoleSelect" onchange="switchLoginRole()" style="width: 100%; background: #111; color: #fff; border: 1px solid var(--accent-primary); padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; outline: none;">
+            <option value="user">👤 Standard User</option>
+            <option value="admin">🛡️ Administrator</option>
+          </select>
+        </div>
+
+        <input id="usernameInput" type="text" placeholder="Username" style="width: 100%; background: #111; border: 1px solid rgba(255,255,255,0.05); padding: 14px 16px; border-radius: 12px; color: var(--text-main); font-size: 0.95rem; outline: none;" />
+        <input id="passwordInput" type="password" placeholder="Password" style="width: 100%; background: #111; border: 1px solid rgba(255,255,255,0.05); padding: 14px 16px; border-radius: 12px; color: var(--text-main); font-size: 0.95rem; outline: none; margin-bottom: 12px;" />
+        
+        <div style="display: flex; gap: 16px; width: 100%;">
+          <button class="btn-login" style="flex:1;" onclick="handleLogin()">Login</button>
+          <button class="btn-register" style="flex:1;" onclick="handleRegister()">Register</button>
+        </div>
+        <div id="authMsg" style="color: #ef4444; font-size: 0.85rem; height: 20px;"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function switchLoginRole() {
+      const mode = document.getElementById('loginRoleSelect').value;
+      document.getElementById('passwordInput').value = '';
+      if (mode === 'admin') {
+        document.getElementById('usernameInput').value = 'Ganesh';
+        document.getElementById('usernameInput').placeholder = 'Admin Username';
+      } else {
+        document.getElementById('usernameInput').value = '';
+        document.getElementById('usernameInput').placeholder = 'Username';
+      }
+    }
+
+    async function handleLogin() {
+      const u = document.getElementById('usernameInput').value.trim();
+      const p = document.getElementById('passwordInput').value;
+      if (!u || !p) return;
+      
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        window.location.href = '/';
+      } else {
+        document.getElementById('authMsg').textContent = data.detail || 'Login failed';
+      }
+    }
+
+    async function handleRegister() {
+      const u = document.getElementById('usernameInput').value.trim();
+      const p = document.getElementById('passwordInput').value;
+      const msgDiv = document.getElementById('authMsg');
+      if (!u || !p) {
+        msgDiv.style.color = '#ef4444';
+        msgDiv.textContent = 'Please enter username and password.';
+        return;
+      }
+      
+      const res = await fetch('/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        msgDiv.style.color = '#34d399';
+        msgDiv.textContent = data.message || 'Registration request sent! Awaiting Admin approval.';
+      } else {
+        msgDiv.style.color = '#ef4444';
+        msgDiv.textContent = data.detail || 'Registration failed';
+      }
+    }
+  </script>
+</body>
+</html>

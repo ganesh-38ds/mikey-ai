@@ -1,0 +1,66 @@
+MIKEY PROJECT EXPLANATION
+
+WHAT IS MY PROJECT?
+Mikey is a web-based AI assistant project. It is a small FastAPI app that lets a user chat with an AI model, switch between English and Telugu, get weather, and use voice assistance.
+
+WHAT TOOLS I USE IN THE PROJECT?
+- Python: main programming language.
+- FastAPI: builds the backend server and API routes.
+- Uvicorn: starts the FastAPI app.
+- HTML, CSS, JavaScript: builds the front-end UI and browser logic.
+- Groq: AI model provider that gives the chatbot replies.
+- OpenWeatherMap API: provides live weather data.
+- gTTS: converts text into speech audio.
+- Browser speech APIs: speech recognition and speech synthesis.
+- .env file: stores secret keys.
+
+WHAT LIBRARIES ARE USED?
+- fastapi==0.111.0
+- uvicorn[standard]==0.29.0
+- groq==0.9.0
+- httpx==0.27.0
+- python-multipart==0.0.9
+- gTTS==2.5.4
+- python-dotenv is used to load .env values.
+
+WHAT DATABASE DO I USE?
+This project does not use a database such as MySQL, PostgreSQL, or MongoDB. It is a lightweight app made for local demo use. It stores keys in a .env file and sends chat history to the AI service.
+
+HOW THE PROJECT WORKS STEP BY STEP
+1. The user opens the app in the browser.
+2. The FastAPI server serves the HTML page.
+3. The user types a message or clicks a quick topic button.
+4. The browser sends the message to the /chat API.
+5. The backend sends the message and conversation history to Groq.
+6. Groq returns the AI response.
+7. The backend returns the reply to the browser.
+8. The browser shows the answer in the chat message area.
+
+HOW THE WEATHER FEATURE WORKS
+- The user types a city name.
+- The browser calls the /weather API.
+- The backend requests current weather data from OpenWeatherMap.
+- The API returns weather details such as temperature, country, humidity, wind, and a weather icon.
+- The frontend shows this weather information in the weather card.
+
+HOW THE VOICE ASSISTANCE WORKS
+Voice input:
+- The browser uses speech recognition so the user can speak instead of typing.
+
+Voice output:
+- The browser can use speech synthesis to speak the answer.
+- If the machine does not have a Telugu browser voice, the project uses the backend text-to-speech route.
+- The /tts route uses gTTS to generate Telugu audio and return it as an audio file.
+
+WHAT IS EACH FILE USED FOR?
+- main.py: main server and API logic.
+- static/index.html: website layout and interactive frontend.
+- requirements.txt: all Python packages needed for the app.
+- .env: secret API keys.
+- start.bat: Windows startup script.
+
+SIMPLE EXPLANATION FOR EVERYONE
+Think of the project as a smart dashboard. The browser is the front door, FastAPI is the manager, Groq is the brain for AI answers, OpenWeatherMap is the live weather source, and voice support helps the user speak and hear responses.
+
+FINAL SUMMARY
+This project is a local AI assistant project that combines chat, weather, and voice features in one simple application. It uses FastAPI for the server, HTML/CSS/JavaScript for the UI, Groq for AI, OpenWeatherMap for live weather, and gTTS for speech fallback. No database is used because the app is designed to stay simple and lightweight.
