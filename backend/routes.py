@@ -1075,6 +1075,8 @@ def universal_intent_router(msg: str):
         "what's going on", "what's happening", "whats going on", "whats happening", "what is happening",
         "what happened", "who won", "winner of", "standings", "leaderboard",
         "who is the current", "who is currently", "who is ceo", "who is president", "who is prime minister",
+        "cm of", "chief minister", "pm of", "prime minister", "president of", "ceo of",
+        "in ap", "andhra pradesh", "telangana", "tamil nadu", "kerala", "karnataka",
         "2024", "2025", "2026", "2027",
         "news", "headlines", "scores", "score", "match", "matches", "tournament",
         "stock price", "crypto price", "price of", "market cap",
@@ -1163,9 +1165,15 @@ def fetch_deep_snippet(url: str, max_chars: int = 2500) -> str:
             soup = BeautifulSoup(resp.text, "html.parser")
             for tag in soup(["script", "style", "nav", "footer", "header", "aside", "form"]):
                 tag.decompose()
+            
+            infobox_text = ""
+            infobox = soup.find("table", class_="infobox")
+            if infobox:
+                infobox_text = infobox.get_text(separator=" | ", strip=True) + "\n\n"
+
             paragraphs = [p.get_text().strip() for p in soup.find_all("p") if len(p.get_text().strip()) > 40]
-            if paragraphs:
-                return " ".join(paragraphs)[:max_chars]
+            if paragraphs or infobox_text:
+                return (infobox_text + " ".join(paragraphs))[:max_chars]
     except Exception:
         pass
     return ""
