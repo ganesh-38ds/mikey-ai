@@ -1216,57 +1216,41 @@ def fetch_wikipedia_search(query: str, max_results: int = 3) -> list:
         print(f"Wikipedia search error: {e}")
     return []
 
-def fetch_google_news_rss(query: str, lang: str = 'en', max_items: int = 4) -> list:
-    """Fetch live news from Google News RSS with fast concurrent decoding."""
+def fetch_bing_news_rss(query: str, max_items: int = 5) -> list:
+    """Fetch live news from Bing News RSS which is cloud-friendly (Render/AWS)."""
     try:
         import requests
-        from googlenewsdecoder import new_decoderv1
-
-        hl = 'te' if lang == 'te' else 'en-IN'
-        gl = 'IN'
+        import urllib.parse
         encoded_q = urllib.parse.quote(query)
-        url = f'https://news.google.com/rss/search?q={encoded_q}&hl={hl}&gl={gl}&ceid={gl}:{hl}'
-
-        # ADDED: Fake browser headers to bypass Render/AWS cloud IP blocks
+        url = f"https://www.bing.com/news/search?q={encoded_q}&format=rss"
+        
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.5",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Accept": "application/rss+xml, application/xml, text/xml"
         }
-
+        
         r = requests.get(url, headers=headers, timeout=5.0)
         if r.status_code != 200:
             return []
+            
         root = ET.fromstring(r.text)
         items = root.findall('.//item')[:max_items]
-        if not items:
-            return []
-
-        def decode_item(it):
+        results = []
+        for it in items:
             title = it.findtext('title', '')
             pub_date = it.findtext('pubDate', '')
-            source = it.find('source')
-            source_name = source.text if source is not None else 'News Source'
-            raw_link = it.findtext('link', '')
-            clean_link = raw_link
-            try:
-                dec = new_decoderv1(raw_link)
-                if dec.get("status") and dec.get("decoded_url"):
-                    clean_link = dec["decoded_url"]
-            except Exception:
-                pass
-            return {
+            desc = it.findtext('description', '')
+            link = it.findtext('link', '')
+            results.append({
                 "title": title,
-                "source": source_name,
-                "snippet": f"Reported by {source_name}: {title}",
+                "source": "Bing News",
+                "snippet": desc,
                 "pubDate": pub_date,
-                "link": clean_link
-            }
-
-        with ThreadPoolExecutor(max_workers=min(4, len(items))) as executor:
-            return list(executor.map(decode_item, items))
+                "link": link
+            })
+        return results
     except Exception as e:
-        print(f"Google News RSS error: {e}")
+        print(f"Bing News RSS error: {e}")
         return []
 
 def fetch_direct_news_fallback() -> list:
@@ -1347,10 +1331,10 @@ def fetch_realtime_knowledge(query: str, category: str = "general", lang: str = 
     
     is_news_query = category in ["news", "general"] or "news" in query.lower()
 
-    # 1. Google News RSS (Fastest & most up-to-date)
-    gnews = fetch_google_news_rss(query, lang=lang)
-    if gnews:
-        combined.extend(gnews)
+    # 1. Bing News RSS (Bypasses Render IP blocks perfectly for regional queries)
+    bing_news = fetch_bing_news_rss(query)
+    if bing_news:
+        combined.extend(bing_news)
 
     # 2. DuckDuckGo (News / Text) if we need more depth
     if len(combined) < 3:
