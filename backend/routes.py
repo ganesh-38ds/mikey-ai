@@ -1338,6 +1338,13 @@ def fetch_realtime_knowledge(query: str, category: str = "general", lang: str = 
 
     combined = []
     
+    # Pre-process abbreviations to prevent search engines from thinking "cm" means "centimeter"
+    lower_q = query.lower()
+    if lower_q.startswith("cm of ") or " cm of " in lower_q or lower_q == "cm":
+        query = query.replace("cm", "chief minister").replace("CM", "Chief Minister")
+    if lower_q.startswith("pm of ") or " pm of " in lower_q or lower_q == "pm":
+        query = query.replace("pm", "prime minister").replace("PM", "Prime Minister")
+    
     is_news_query = category in ["news", "general"] or "news" in query.lower()
 
     # 1. Google News RSS (Fastest & most up-to-date)
