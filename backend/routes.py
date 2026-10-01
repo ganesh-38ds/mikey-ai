@@ -1182,10 +1182,18 @@ def fetch_wikipedia_search(query: str, max_results: int = 3) -> list:
     """Fetch factual background and current event updates from Wikipedia API."""
     try:
         import requests
+        
+        # Expand abbreviations for better Wikipedia exact-matching
+        wiki_query = query.lower()
+        if wiki_query.startswith("cm of ") or " cm of " in wiki_query or wiki_query == "cm":
+            wiki_query = wiki_query.replace("cm of", "Chief Minister of")
+        if wiki_query.startswith("pm of ") or " pm of " in wiki_query or wiki_query == "pm":
+            wiki_query = wiki_query.replace("pm of", "Prime Minister of")
+            
         headers = {"User-Agent": "MikeyAI/1.0 (contact@mikey.ai)"}
         r = requests.get(
             "https://en.wikipedia.org/w/api.php",
-            params={"action": "query", "list": "search", "srsearch": query, "format": "json", "utf8": 1, "srlimit": max_results},
+            params={"action": "query", "list": "search", "srsearch": wiki_query, "format": "json", "utf8": 1, "srlimit": max_results},
             headers=headers,
             timeout=3.0
         )
