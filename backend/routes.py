@@ -1211,7 +1211,14 @@ def fetch_google_news_rss(query: str, lang: str = 'en', max_items: int = 4) -> l
         encoded_q = urllib.parse.quote(query)
         url = f'https://news.google.com/rss/search?q={encoded_q}&hl={hl}&gl={gl}&ceid={gl}:{hl}'
 
-        r = requests.get(url, timeout=5.0)
+        # ADDED: Fake browser headers to bypass Render/AWS cloud IP blocks
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+        }
+
+        r = requests.get(url, headers=headers, timeout=5.0)
         if r.status_code != 200:
             return []
         root = ET.fromstring(r.text)
@@ -1245,6 +1252,29 @@ def fetch_google_news_rss(query: str, lang: str = 'en', max_items: int = 4) -> l
     except Exception as e:
         print(f"Google News RSS error: {e}")
         return []
+
+def fetch_direct_news_fallback() -> list:
+    """A direct RSS fetcher for general top news that never blocks cloud servers."""
+    try:
+        import requests
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+        r = requests.get("https://feeds.bbci.co.uk/news/world/rss.xml", headers=headers, timeout=5.0)
+        if r.status_code == 200:
+            root = ET.fromstring(r.text)
+            items = root.findall('.//item')[:4]
+            results = []
+            for it in items:
+                results.append({
+                    "title": it.findtext('title', ''),
+                    "source": "BBC World News",
+                    "snippet": it.findtext('description', ''),
+                    "pubDate": it.findtext('pubDate', ''),
+                    "link": it.findtext('link', '')
+                })
+            return results
+    except Exception:
+        pass
+    return []
 
 def fetch_duckduckgo_news_or_text(query: str, max_results: int = 4) -> list:
     """Fetch live search from DuckDuckGo with Ratelimit safety."""
@@ -1309,6 +1339,12 @@ def fetch_realtime_knowledge(query: str, category: str = "general", lang: str = 
         if wiki:
             combined.extend(wiki)
 
+    if not combined:
+        if "news" in query.lower() or category == "general":
+            direct = fetch_direct_news_fallback()
+            if direct:
+                combined.extend(direct)
+        
     if not combined:
         return []
 
