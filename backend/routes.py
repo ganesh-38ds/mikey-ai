@@ -1222,14 +1222,16 @@ def fetch_bing_news_rss(query: str, max_items: int = 5) -> list:
         import requests
         import urllib.parse
         encoded_q = urllib.parse.quote(query)
-        url = f"https://www.bing.com/news/search?q={encoded_q}&format=rss"
+        url = f"https://www.bing.com/news/search?q={encoded_q}&format=rss&cc=IN&setmkt=en-IN"
         
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            "Accept": "application/rss+xml, application/xml, text/xml"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Cookie": "SRCHD=AF=NOFORM; SRCHUID=V=2&GUID=0"
         }
         
-        r = requests.get(url, headers=headers, timeout=5.0)
+        r = requests.get(url, headers=headers, timeout=10.0)
         if r.status_code != 200:
             return []
             
@@ -1336,13 +1338,13 @@ def fetch_realtime_knowledge(query: str, category: str = "general", lang: str = 
     if bing_news:
         combined.extend(bing_news)
 
-    # 2. DuckDuckGo (News / Text) if we need more depth
-    if len(combined) < 3:
+    # 2. DuckDuckGo (Text) ONLY if it's not a news query (DDG Text returns garbage homepages for "news")
+    if len(combined) < 3 and not is_news_query:
         ddg = fetch_duckduckgo_news_or_text(query)
         if ddg:
             combined.extend(ddg)
 
-    # 3. Direct RSS Fallback (if cloud IP is blocked for DDG/Google)
+    # 3. Direct RSS Fallback (if cloud IP is blocked for Bing)
     if not combined and is_news_query:
         direct = fetch_direct_news_fallback()
         if direct:
