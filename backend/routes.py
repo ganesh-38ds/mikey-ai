@@ -1226,7 +1226,7 @@ def fetch_bing_news_rss(query: str, max_items: int = 5) -> list:
         
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept": "application/rss+xml, application/xml, text/xml",
             "Accept-Language": "en-US,en;q=0.5",
             "Cookie": "SRCHD=AF=NOFORM; SRCHUID=V=2&GUID=0"
         }
@@ -1255,12 +1255,27 @@ def fetch_bing_news_rss(query: str, max_items: int = 5) -> list:
         print(f"Bing News RSS error: {e}")
         return []
 
-def fetch_direct_news_fallback() -> list:
+def fetch_direct_news_fallback(query: str = "") -> list:
     """A direct RSS fetcher for general top news that never blocks cloud servers."""
     try:
         import requests
+        
+        q_lower = query.lower()
+        if "sport" in q_lower or "cricket" in q_lower or "football" in q_lower:
+            url = "http://feeds.bbci.co.uk/sport/rss.xml"
+            source_name = "BBC Sports"
+        elif "tech" in q_lower or "science" in q_lower:
+            url = "http://feeds.bbci.co.uk/news/technology/rss.xml"
+            source_name = "BBC Tech"
+        elif "business" in q_lower or "economy" in q_lower or "market" in q_lower:
+            url = "http://feeds.bbci.co.uk/news/business/rss.xml"
+            source_name = "BBC Business"
+        else:
+            url = "https://feeds.bbci.co.uk/news/world/rss.xml"
+            source_name = "BBC World News"
+            
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
-        r = requests.get("https://feeds.bbci.co.uk/news/world/rss.xml", headers=headers, timeout=5.0)
+        r = requests.get(url, headers=headers, timeout=5.0)
         if r.status_code == 200:
             root = ET.fromstring(r.text)
             items = root.findall('.//item')[:4]
@@ -1268,7 +1283,7 @@ def fetch_direct_news_fallback() -> list:
             for it in items:
                 results.append({
                     "title": it.findtext('title', ''),
-                    "source": "BBC World News",
+                    "source": source_name,
                     "snippet": it.findtext('description', ''),
                     "pubDate": it.findtext('pubDate', ''),
                     "link": it.findtext('link', '')
@@ -1346,7 +1361,7 @@ def fetch_realtime_knowledge(query: str, category: str = "general", lang: str = 
 
     # 3. Direct RSS Fallback (if cloud IP is blocked for Bing)
     if not combined and is_news_query:
-        direct = fetch_direct_news_fallback()
+        direct = fetch_direct_news_fallback(query)
         if direct:
             combined.extend(direct)
 
