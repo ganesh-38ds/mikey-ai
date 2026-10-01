@@ -13,3 +13,4 @@ Pillow
 groq>=1.0.0
 googlenewsdecoder
 duckduckgo_search
+beautifulsoup4

@@ -1158,7 +1158,7 @@ def fetch_deep_snippet(url: str, max_chars: int = 2500) -> str:
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
-        with httpx.Client(timeout=2.8, follow_redirects=True, headers=headers) as client:
+        with httpx.Client(timeout=6.0, follow_redirects=True, headers=headers) as client:
             resp = client.get(url)
             if resp.status_code != 200:
                 return ""
