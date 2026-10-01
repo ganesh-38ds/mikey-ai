@@ -1147,7 +1147,7 @@ def fetch_weather_direct(city: str) -> list:
         print(f"Weather fetch error: {e}")
     return []
 
-def fetch_deep_snippet(url: str, max_chars: int = 700) -> str:
+def fetch_deep_snippet(url: str, max_chars: int = 2500) -> str:
     """Extract clean body text from a webpage using BeautifulSoup."""
     if not url or not url.startswith("http"):
         return ""
@@ -1322,6 +1322,8 @@ def fetch_realtime_knowledge(query: str, category: str = "general", lang: str = 
 
     combined = []
     
+    is_news_query = category in ["news", "general"] or "news" in query.lower()
+
     # 1. Google News RSS (Fastest & most up-to-date)
     gnews = fetch_google_news_rss(query, lang=lang)
     if gnews:
@@ -1333,26 +1335,26 @@ def fetch_realtime_knowledge(query: str, category: str = "general", lang: str = 
         if ddg:
             combined.extend(ddg)
 
-    # 3. Wikipedia API fallback for entities/topics
-    if len(combined) < 2:
+    # 3. Direct RSS Fallback (if cloud IP is blocked for DDG/Google)
+    if not combined and is_news_query:
+        direct = fetch_direct_news_fallback()
+        if direct:
+            combined.extend(direct)
+
+    # 4. Wikipedia API fallback (Only for factual/topic queries, NEVER for "news" queries)
+    if len(combined) < 2 and not is_news_query:
         wiki = fetch_wikipedia_search(query)
         if wiki:
             combined.extend(wiki)
 
     if not combined:
-        if "news" in query.lower() or category == "general":
-            direct = fetch_direct_news_fallback()
-            if direct:
-                combined.extend(direct)
-        
-    if not combined:
         return []
 
-    # 4. Deep Page Extraction on the top 1-2 articles for richer context
+    # 5. Deep Page Extraction on the top 1-2 articles for richer context
     for item in combined[:2]:
         link = item.get("link", "")
         if link and link.startswith("http") and "google.com" not in link:
-            deep_text = fetch_deep_snippet(link, max_chars=700)
+            deep_text = fetch_deep_snippet(link, max_chars=2500)
             if deep_text and len(deep_text) > 100:
                 item["snippet"] = deep_text
 
