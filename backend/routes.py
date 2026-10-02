@@ -737,7 +737,7 @@ def call_ai_chat(prompt_or_messages, system_instruction=DEFAULT_PROMPT, history=
                     resp = None
                     for m in ['gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-2.5-flash-lite']:
                         try:
-                            resp = gemini_client.models.generate_content(
+                            resp = backend.main.gemini_client.models.generate_content(
                                 model=m,
                                 contents=prompt_or_messages,
                                 config={"system_instruction": system_instruction}
@@ -764,7 +764,7 @@ def call_ai_chat(prompt_or_messages, system_instruction=DEFAULT_PROMPT, history=
                     resp = None
                     for m in ['gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-2.5-flash-lite']:
                         try:
-                            resp = gemini_client.models.generate_content(
+                            resp = backend.main.gemini_client.models.generate_content(
                                 model=m,
                                 contents=parts,
                                 config={"system_instruction": system_instruction}
@@ -780,7 +780,7 @@ def call_ai_chat(prompt_or_messages, system_instruction=DEFAULT_PROMPT, history=
                     reply = resp.text
             else:
                 # Legacy google.generativeai SDK
-                genai = gemini_client
+                genai = backend.main.gemini_client
                 # We will handle the fallback in the generate_content step below for legacy
                 if is_doc_task:
                     res = None
