@@ -2139,10 +2139,16 @@ async function sendMessage(overrideText) {
   }
   
   if (lowerText === '/vibe' || lowerText === '/theme') {
-    if (!overrideText) input.value = '';
-    openVibeModal();
-    return;
-  }
+      if (!overrideText) input.value = '';
+      openVibeModal();
+      return;
+    }
+    
+    if (lowerText === '/vision') {
+      if (!overrideText) input.value = '';
+      openVisionKeyModal();
+      return;
+    }
   
   if (!currentThreadId) newChat();
   

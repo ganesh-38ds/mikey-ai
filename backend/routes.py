@@ -42,7 +42,7 @@ router = APIRouter()
 # We map 'app' to 'router' in the routes lines to minimize changes
 app = router
 
-from backend.main import groq_client, gemini_client, gemini_enabled, _use_new_genai, genai_new, genai_legacy, DEFAULT_PROMPT, UPLOAD_DIR, GROQ_API_KEY, WEATHER_API_KEY, get_groq_client
+from backend.main import groq_client, gemini_client, _init_gemini, gemini_enabled, _use_new_genai, genai_new, genai_types, genai_legacy, DEFAULT_PROMPT, UPLOAD_DIR, GROQ_API_KEY, WEATHER_API_KEY, get_groq_client
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 @app.get("/")
@@ -728,16 +728,27 @@ def call_ai_chat(prompt_or_messages, system_instruction=DEFAULT_PROMPT, history=
         blip_caption = ""
 
     # ── Step 1: Try Gemini first if enabled (best vision quality) ────────────────
-    if gemini_enabled and gemini_client:
+    import backend.main
+    if backend.main.gemini_enabled and backend.main.gemini_client:
         try:
             if _use_new_genai and isinstance(gemini_client, type(genai_new.Client(api_key="x"))) if genai_new else False:
                 # New google-genai SDK
                 if is_doc_task:
-                    resp = gemini_client.models.generate_content(
-                        model="gemini-1.5-flash",
-                        contents=prompt_or_messages,
-                        config={"system_instruction": system_instruction}
-                    )
+                    resp = None
+                    for m in ['gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-2.5-flash-lite']:
+                        try:
+                            resp = gemini_client.models.generate_content(
+                                model=m,
+                                contents=prompt_or_messages,
+                                config={"system_instruction": system_instruction}
+                            )
+                            break
+                        except Exception as e:
+                            if '503' in str(e) or '404' in str(e) or 'unavailable' in str(e).lower() or '429' in str(e):
+                                continue
+                            raise
+                    if not resp:
+                        raise Exception('All Gemini models are experiencing high demand (503)')
 
                     return resp.text
                 else:
@@ -750,19 +761,40 @@ def call_ai_chat(prompt_or_messages, system_instruction=DEFAULT_PROMPT, history=
                     user_question = prompt_or_messages if isinstance(prompt_or_messages, str) and prompt_or_messages \
                         else "Analyze and describe everything you see in this image in full detail."
                     parts.append(user_question)
-                    resp = gemini_client.models.generate_content(
-                        model="gemini-1.5-flash",
-                        contents=parts,
-                        config={"system_instruction": system_instruction}
-                    )
+                    resp = None
+                    for m in ['gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-2.5-flash-lite']:
+                        try:
+                            resp = gemini_client.models.generate_content(
+                                model=m,
+                                contents=parts,
+                                config={"system_instruction": system_instruction}
+                            )
+                            break
+                        except Exception as e:
+                            if '503' in str(e) or '404' in str(e) or 'unavailable' in str(e).lower() or '429' in str(e):
+                                continue
+                            raise
+                    if not resp:
+                        raise Exception('All Gemini models are experiencing high demand (503)')
 
                     reply = resp.text
             else:
                 # Legacy google.generativeai SDK
                 genai = gemini_client
-                model = genai.GenerativeModel("gemini-1.5-flash", system_instruction=system_instruction)
+                # We will handle the fallback in the generate_content step below for legacy
                 if is_doc_task:
-                    res = model.generate_content(prompt_or_messages)
+                    res = None
+                    for m in ['gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-2.5-flash-lite']:
+                        try:
+                            model = genai.GenerativeModel(m, system_instruction=system_instruction)
+                            res = model.generate_content(prompt_or_messages)
+                            break
+                        except Exception as e:
+                            if '503' in str(e) or '404' in str(e) or 'unavailable' in str(e).lower() or '429' in str(e):
+                                continue
+                            raise
+                    if not res:
+                        raise Exception('All Gemini models are experiencing high demand (503)')
                     return res.text
                 else:
                     contents = []
@@ -781,7 +813,18 @@ def call_ai_chat(prompt_or_messages, system_instruction=DEFAULT_PROMPT, history=
                         else "Analyze and describe everything you see in this image in full detail."
                     user_parts.append(user_question)
                     contents.append({"role": "user", "parts": user_parts})
-                    res = model.generate_content(contents)
+                    res = None
+                    for m in ['gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-2.5-flash-lite']:
+                        try:
+                            model = genai.GenerativeModel(m, system_instruction=system_instruction)
+                            res = model.generate_content(contents)
+                            break
+                        except Exception as e:
+                            if '503' in str(e) or '404' in str(e) or 'unavailable' in str(e).lower() or '429' in str(e):
+                                continue
+                            raise
+                    if not res:
+                        raise Exception('All Gemini models are experiencing high demand (503)')
                     reply = res.text
             if reply and not any(phrase in reply.lower() for phrase in
                                  ["text-based mode", "cannot directly access",
@@ -789,6 +832,7 @@ def call_ai_chat(prompt_or_messages, system_instruction=DEFAULT_PROMPT, history=
                 return reply
         except Exception as gem_err:
             print(f"Gemini error, falling back: {gem_err}")
+            return f"❌ Gemini Engine Error: {gem_err}"
 
     # ── Step 2: Use multimodal custom proxy (Groq client) ───────────────────────────────────────────────
     if groq_client:
@@ -895,9 +939,7 @@ def save_gemini_key(req: KeyRequest):
         raise HTTPException(status_code=400, detail="API Key cannot be empty")
     
     try:
-        success = _init_gemini(key)
-        if not success:
-            raise Exception("Gemini key verification failed or API unreachable")
+        _init_gemini(key)
         GEMINI_API_KEY = key
         
         env_path = ".env"

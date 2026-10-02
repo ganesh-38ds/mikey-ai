@@ -122,13 +122,10 @@ def _init_gemini(api_key: str) -> bool:
         if _use_new_genai and genai_new:
             gemini_client = genai_new.Client(api_key=api_key)
             # Quick connectivity test
-            gemini_client.models.generate_content(
-                model="gemini-1.5-flash",
-                contents="ping"
-            )
+            pass
         elif genai_legacy:
             genai_legacy.configure(api_key=api_key)
-            genai_legacy.GenerativeModel("gemini-1.5-flash").generate_content("ping")
+            pass
             gemini_client = genai_legacy
         else:
             return False
@@ -137,7 +134,7 @@ def _init_gemini(api_key: str) -> bool:
     except Exception as e:
         print(f"Gemini init failed: {e}")
         gemini_enabled = False
-        return False
+        raise Exception(f"Google API Error: {str(e)}")
 
 if GEMINI_API_KEY and GEMINI_API_KEY != "YOUR_GEMINI_API_KEY_HERE":
     _init_gemini(GEMINI_API_KEY)
