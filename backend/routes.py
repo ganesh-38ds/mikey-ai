@@ -731,7 +731,7 @@ def call_ai_chat(prompt_or_messages, system_instruction=DEFAULT_PROMPT, history=
     import backend.main
     if backend.main.gemini_enabled and backend.main.gemini_client:
         try:
-            if _use_new_genai and isinstance(gemini_client, type(genai_new.Client(api_key="x"))) if genai_new else False:
+            if _use_new_genai:
                 # New google-genai SDK
                 if is_doc_task:
                     resp = None
