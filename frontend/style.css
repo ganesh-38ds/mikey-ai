@@ -1041,6 +1041,28 @@ select option { background-color: #111 !important; }
   .sys-icon { display: none; }
 }
 
+@media (max-width: 600px) {
+  /* Fix composer bottom overflowing horizontally */
+  .composer-bottom { flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .composer-chips { flex-wrap: wrap; justify-content: center; }
+  
+  /* Reduce padding to maximize horizontal screen real estate */
+  .chat-wrapper { padding: 0 12px 16px; }
+  .header { padding: 12px 16px; }
+  .msg { padding: 0 12px; }
+  
+  /* Stack System Card content vertically to prevent squishing */
+  .system-card { padding: 16px; flex-direction: column; text-align: center; }
+  
+  /* Optimize suggestion cards spacing */
+  .sugg-card { padding: 16px; }
+  
+  /* Hide Vibe text to prevent header overlap on very small phones */
+  .vibe-header-text { display: none; }
+  .vibe-header-btn { padding: 6px 10px; }
+  .header-actions { gap: 10px; }
+}
+
 
 
 .messages-area { width: 100%; }
