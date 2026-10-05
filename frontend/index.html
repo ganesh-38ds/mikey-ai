@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <title>Mikey — Premium Assistant</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/static/style.css?v=210">
+<link rel="stylesheet" href="/static/style.css?v=211">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
   (function() {
@@ -40,9 +40,10 @@
 <body>
 
 <div class="page-shell">
+  <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleSidebar()"></div>
 
-  <header class="header" style="position: relative; z-index: 9999;">
-    <div class="brand-area" style="gap: 16px; position: relative; z-index: 9999;">
+  <header class="header">
+    <div class="brand-area">
       <!-- Hamburger Menu -->
       <button class="icon-btn" aria-label="Menu" onclick="toggleSidebar()" style="position: relative; z-index: 9999; cursor: pointer; pointer-events: auto;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none;"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -282,7 +283,7 @@
 </div><!-- /.app-container -->
 </div><!-- /.page-shell -->
 
-<script src="/static/script.js?v=208"></script>
+<script src="/static/script.js?v=211"></script>
 
 <div id="visionModal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center;">
   <div class="glass-panel" style="background:#0f172a; padding:28px; border-radius:16px; width:90%; max-width:500px; border:1px solid var(--accent); box-shadow:0 0 40px rgba(0,242,254,0.3);">
@@ -318,13 +319,13 @@
 </div>
 <script>
   function toggleSidebar() {
-    console.log('Hamburger clicked!');
     const sb = document.getElementById('historySidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
     if (sb) {
-      sb.classList.toggle('show-sidebar');
-      console.log('Sidebar toggled. Current class:', sb.className);
-    } else {
-      console.error('Sidebar element not found!');
+      const isOpen = sb.classList.toggle('show-sidebar');
+      if (backdrop) {
+        backdrop.classList.toggle('active', isOpen);
+      }
     }
   }
 </script>
