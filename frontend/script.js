@@ -1256,13 +1256,100 @@ let speechSilenceTimer = null;
 let activeSpeechTranscript = '';
 const SILENCE_DEBOUNCE_MS = 1300; // Natural 1.3s pause before concluding user finished speaking
 
+function dedupeConsecutiveWords(text) {
+  if (!text) return '';
+  const words = text.trim().split(/\s+/);
+  const result = [];
+  for (let i = 0; i < words.length; i++) {
+    const current = words[i];
+    const prev = result[result.length - 1];
+    if (prev && prev.toLowerCase() === current.toLowerCase()) {
+      continue;
+    }
+    result.push(current);
+  }
+  return result.join(' ').trim();
+}
+
+function mergeTranscriptChunks(chunks) {
+  if (!chunks || chunks.length === 0) return '';
+  const merged = [];
+  for (const rawChunk of chunks) {
+    const chunk = dedupeConsecutiveWords((rawChunk || '').trim());
+    if (!chunk) continue;
+    if (merged.length === 0) {
+      merged.push(chunk);
+      continue;
+    }
+    const prev = merged[merged.length - 1];
+    const prevLower = prev.toLowerCase();
+    const chunkLower = chunk.toLowerCase();
+
+    // 1. Exact duplicate chunk (e.g. mobile engine repeats the item)
+    if (prevLower === chunkLower) {
+      continue;
+    }
+
+    // 2. The new chunk contains or extends the previous chunk
+    if (chunkLower.startsWith(prevLower)) {
+      merged[merged.length - 1] = chunk;
+      continue;
+    }
+
+    // 3. The previous chunk already contains the new chunk at the end
+    if (prevLower.endsWith(chunkLower)) {
+      continue;
+    }
+
+    // 4. Overlapping words at the boundary
+    const prevWords = prev.split(/\s+/);
+    const chunkWords = chunk.split(/\s+/);
+    let overlapFound = false;
+    const maxOverlap = Math.min(prevWords.length, chunkWords.length);
+
+    for (let len = maxOverlap; len > 0; len--) {
+      const prevSlice = prevWords.slice(-len).map(w => w.toLowerCase()).join(' ');
+      const chunkSlice = chunkWords.slice(0, len).map(w => w.toLowerCase()).join(' ');
+      if (prevSlice === chunkSlice) {
+        const nonOverlapping = chunkWords.slice(len).join(' ');
+        if (nonOverlapping) {
+          merged[merged.length - 1] = prev + ' ' + nonOverlapping;
+        }
+        overlapFound = true;
+        break;
+      }
+    }
+
+    if (!overlapFound) {
+      merged.push(chunk);
+    }
+  }
+  return dedupeConsecutiveWords(merged.join(' '));
+}
+
+function combineFinalAndInterim(finalText, interimText) {
+  const f = dedupeConsecutiveWords((finalText || '').trim());
+  const i = dedupeConsecutiveWords((interimText || '').trim());
+  if (!f) return i;
+  if (!i) return f;
+  const fLower = f.toLowerCase();
+  const iLower = i.toLowerCase();
+  if (iLower.startsWith(fLower)) {
+    return i;
+  }
+  if (fLower.endsWith(iLower) || fLower.includes(iLower)) {
+    return f;
+  }
+  return dedupeConsecutiveWords(mergeTranscriptChunks([f, i]));
+}
+
 function commitSpeechAndSend() {
   if (speechSilenceTimer) {
     clearTimeout(speechSilenceTimer);
     speechSilenceTimer = null;
   }
 
-  const textToSend = activeSpeechTranscript.trim();
+  const textToSend = dedupeConsecutiveWords(activeSpeechTranscript.trim());
   activeSpeechTranscript = '';
 
   if (!textToSend) return;
@@ -1278,7 +1365,7 @@ function commitSpeechAndSend() {
   setVoiceState('PROCESSING');
   const input = document.getElementById('chatInput');
   if (input) {
-    input.value = textToSend;
+    input.value = '';
     autoResizeChatInput();
   }
   sendMessage(textToSend);
@@ -1292,6 +1379,12 @@ function startListening() {
     speechSilenceTimer = null;
   }
   activeSpeechTranscript = '';
+
+  const input = document.getElementById('chatInput');
+  if (input && document.activeElement !== input) {
+    input.value = '';
+    autoResizeChatInput();
+  }
 
   if (recognition) {
     try { recognition.abort(); } catch(e) {}
@@ -1325,26 +1418,32 @@ function startListening() {
   };
 
   recognition.onresult = (e) => {
-    let sessionInterim = '';
-    let sessionFinal = '';
+    const finalChunks = [];
+    const interimChunks = [];
 
-    for (let i = e.resultIndex; i < e.results.length; ++i) {
-      const trans = e.results[i][0].transcript;
-      if (e.results[i].isFinal) {
-        sessionFinal += trans;
+    // Reconstruct transcript directly from e.results across the current session.
+    // This avoids accumulating duplicates when mobile Chrome fires multiple events with resultIndex = 0.
+    for (let i = 0; i < e.results.length; ++i) {
+      const res = e.results[i];
+      if (!res || !res[0]) continue;
+      const trans = (res[0].transcript || '').trim();
+      if (!trans) continue;
+
+      if (res.isFinal) {
+        finalChunks.push(trans);
       } else {
-        sessionInterim += trans;
+        interimChunks.push(trans);
       }
     }
 
-    if (sessionFinal) {
-      if (activeSpeechTranscript && !activeSpeechTranscript.endsWith(' ')) {
-        activeSpeechTranscript += ' ';
-      }
-      activeSpeechTranscript += sessionFinal.trim();
-    }
+    const sessionFinal = mergeTranscriptChunks(finalChunks);
+    const sessionInterim = mergeTranscriptChunks(interimChunks);
 
-    const currentDisplay = (activeSpeechTranscript + ' ' + sessionInterim).trim();
+    // Save finalized transcript
+    activeSpeechTranscript = sessionFinal;
+
+    // Display combined text cleanly without duplicate tokens
+    const currentDisplay = combineFinalAndInterim(sessionFinal, sessionInterim);
     const input = document.getElementById('chatInput');
     if (input && currentDisplay) {
       input.value = currentDisplay;
@@ -1359,11 +1458,9 @@ function startListening() {
 
     if (currentDisplay) {
       speechSilenceTimer = setTimeout(() => {
-        if (sessionInterim.trim()) {
-          if (activeSpeechTranscript && !activeSpeechTranscript.endsWith(' ')) {
-            activeSpeechTranscript += ' ';
-          }
-          activeSpeechTranscript += sessionInterim.trim();
+        // If silence occurs and interim speech wasn't finalized yet, merge cleanly
+        if (sessionInterim) {
+          activeSpeechTranscript = combineFinalAndInterim(activeSpeechTranscript, sessionInterim);
         }
         commitSpeechAndSend();
       }, SILENCE_DEBOUNCE_MS);
@@ -2101,11 +2198,11 @@ function handleChatKeyDown(event) {
 // Unified sendMessage function
 async function sendMessage(overrideText) {
   const input = document.getElementById('chatInput');
-  const text = overrideText || input.value.trim();
+  const text = overrideText || (input ? input.value.trim() : '');
   const hasImage = pendingImageFile !== null;
   
   if (!text && !hasImage) return;
-  if (!overrideText) {
+  if (input) {
     input.value = '';
     autoResizeChatInput();
   }
