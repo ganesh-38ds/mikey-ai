@@ -48,7 +48,11 @@ from backend.main import groq_client, gemini_client, _init_gemini, gemini_enable
 @app.get("/")
 def serve_frontend():
     frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "index.html")
-    return FileResponse(frontend_path)
+    response = FileResponse(frontend_path)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 @app.post("/signup")
 def signup(req: SignupRequest, response: Response):

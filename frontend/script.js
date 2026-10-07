@@ -1256,6 +1256,8 @@ let speechSilenceTimer = null;
 let activeSpeechTranscript = '';
 const SILENCE_DEBOUNCE_MS = 1300; // Natural 1.3s pause before concluding user finished speaking
 
+console.log("Mikey Voice Assistant v213 loaded");
+
 function dedupeConsecutiveWords(text) {
   if (!text) return '';
   const words = text.trim().split(/\s+/);
@@ -1263,10 +1265,27 @@ function dedupeConsecutiveWords(text) {
   for (let i = 0; i < words.length; i++) {
     const current = words[i];
     const prev = result[result.length - 1];
-    if (prev && prev.toLowerCase() === current.toLowerCase()) {
-      continue;
+    if (prev) {
+      const cleanPrev = prev.toLowerCase().replace(/^[^\w\u0B80-\u0BFF\u0C00-\u0C7F\u0900-\u097F]+|[^\w\u0B80-\u0BFF\u0C00-\u0C7F\u0900-\u097F]+$/g, '');
+      const cleanCurrent = current.toLowerCase().replace(/^[^\w\u0B80-\u0BFF\u0C00-\u0C7F\u0900-\u097F]+|[^\w\u0B80-\u0BFF\u0C00-\u0C7F\u0900-\u097F]+$/g, '');
+      if (cleanPrev && cleanCurrent && cleanPrev === cleanCurrent) {
+        continue;
+      }
     }
     result.push(current);
+  }
+  // Also clean up repeated 2-word pairs: e.g. "today news today news" -> "today news"
+  if (result.length >= 4) {
+    for (let i = 0; i <= result.length - 4; i++) {
+      const w0 = result[i].toLowerCase().replace(/\W+/g, '');
+      const w1 = result[i + 1].toLowerCase().replace(/\W+/g, '');
+      const w2 = result[i + 2].toLowerCase().replace(/\W+/g, '');
+      const w3 = result[i + 3].toLowerCase().replace(/\W+/g, '');
+      if (w0 && w1 && w0 === w2 && w1 === w3) {
+        result.splice(i + 2, 2);
+        i--;
+      }
+    }
   }
   return result.join(' ').trim();
 }
@@ -1397,11 +1416,15 @@ function startListening() {
     return;
   }
 
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   recognition = new SR();
   recognition.lang = langConfig[currentLang]?.voiceCode || 'en-IN';
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
-  recognition.continuous = true; // Stay listening through natural pauses
+  // On mobile Android Chrome, continuous=true triggers native Google Speech engine duplicate phrase bug.
+  // Setting continuous=false on mobile allows each utterance to be captured cleanly without repetition,
+  // and onend automatically restarts listening for natural continuous conversation.
+  recognition.continuous = !isMobile;
 
   recognition.onstart = () => {
     setVoiceState('LISTENING');
