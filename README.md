@@ -1,5 +1,9 @@
 # 🧠 Mikey - Full-Stack AI Assistant
 
+[![Live App](https://img.shields.io/badge/Live%20App-mikey--ai.onrender.com-00f2fe?style=for-the-badge&logo=render&logoColor=white)](https://mikey-ai.onrender.com)
+
+🌐 **Live Deployment:** [https://mikey-ai.onrender.com](https://mikey-ai.onrender.com)
+
 ## 📌 Project Overview
 Mikey is a dynamic, full-stack AI web application designed to be your ultimate friendly chat companion, featuring continuous voice mode, live internet access, and autonomous tone-matching in a modern dark-themed UI.
 
@@ -7,7 +11,7 @@ Mikey is a dynamic, full-stack AI web application designed to be your ultimate f
 Traditional AI chatbots often feel robotic, require constant manual typing, and lack real-time awareness of the outside world. Mikey solves this by providing a continuous, hands-free voice interface, emotionally intelligent tone-matching, and the ability to pull in live web data—creating a companion that feels alive and contextually aware.
 
 ## 🎬 Demo
-*(Add a screenshot, GIF, or link to a video demonstrating Mikey's voice mode and UI here)*
+* 🚀 **Try Mikey Live:** [https://mikey-ai.onrender.com](https://mikey-ai.onrender.com)
 
 ## 🎯 Objectives
 * Deliver a highly friendly and natural conversational chat experience.

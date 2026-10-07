@@ -1,5 +1,7 @@
 # 🧠 Mikey
 
+🌐 **Live Deployment:** [https://mikey-ai.onrender.com](https://mikey-ai.onrender.com)
+
 ## 📌 Project Overview
 Mikey is a dynamic, full-stack AI web application designed to be your ultimate friendly chat companion, featuring continuous voice mode, live internet access, and autonomous tone-matching in a modern dark-themed UI.
 
