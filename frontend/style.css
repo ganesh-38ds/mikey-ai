@@ -964,30 +964,36 @@ select option { background-color: #111 !important; }
   margin: 0;
 }
 
-/* Hero State (Scrollable Stream when no messages) */
+/* Hero State (Full Viewport Centered Landing View) */
 .hero-state {
   flex: 1;
   min-height: 0;
   width: 100%;
-  max-width: 48rem; /* 768px - ChatGPT/Claude standard centered column */
+  max-width: 48rem; /* 768px - standard centered column */
   margin: 0 auto;
-  padding: 24px 16px 20px 16px;
+  padding: clamp(10px, 2vh, 24px) 16px clamp(8px, 1.8vh, 18px) 16px;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   box-sizing: border-box;
 }
 .hero-state::-webkit-scrollbar { width: 4px; }
 .hero-state::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
 
+/* When heroState is visible, completely hide messages-area so heroState occupies 100% full view height */
+#heroState:not([style*="display: none"]) ~ #messages,
+#heroState:not([style*="display: none"]) + #messages {
+  display: none !important;
+}
+
 .orb-container {
-  width: 96px;
-  height: 96px;
-  margin-bottom: 16px;
+  width: clamp(56px, 9vh, 88px);
+  height: clamp(56px, 9vh, 88px);
+  margin-bottom: clamp(6px, 1.4vh, 14px);
   position: relative;
   flex-shrink: 0;
 }
@@ -1014,10 +1020,11 @@ select option { background-color: #111 !important; }
 
 .hero-state h2 {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(1.8rem, 5vw, 2.8rem);
-  font-weight: 500;
-  margin-bottom: 6px;
+  font-size: clamp(1.4rem, 3.2vh, 2.3rem);
+  font-weight: 600;
+  margin-bottom: clamp(2px, 0.5vh, 6px);
   text-align: center;
+  line-height: 1.2;
 }
 .hero-state h2 .highlight {
   font-weight: 700;
@@ -1027,8 +1034,8 @@ select option { background-color: #111 !important; }
 }
 .hero-subtitle {
   color: var(--text-muted, #9b97b8);
-  font-size: 0.95rem;
-  margin-bottom: 24px;
+  font-size: clamp(0.78rem, 1.6vh, 0.92rem);
+  margin-bottom: clamp(8px, 1.8vh, 18px);
   text-align: center;
 }
 
@@ -1037,59 +1044,60 @@ select option { background-color: #111 !important; }
   width: 100%;
   background: var(--panel-bg, rgba(20, 15, 45, 0.6));
   border: 1px solid var(--panel-border, rgba(255, 255, 255, 0.1));
-  border-radius: 16px;
-  padding: 14px 18px;
+  border-radius: 14px;
+  padding: clamp(8px, 1.4vh, 13px) clamp(12px, 2vw, 16px);
   display: flex;
   gap: 12px;
-  align-items: flex-start;
+  align-items: center;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  margin-bottom: 20px;
+  margin-bottom: clamp(8px, 1.8vh, 16px);
   box-shadow: inset 0 0 20px rgba(255,255,255,0.02);
   box-sizing: border-box;
 }
 .sys-icon {
-  width: 36px;
-  height: 36px;
+  width: clamp(28px, 3.8vh, 34px);
+  height: clamp(28px, 3.8vh, 34px);
   border-radius: 50%;
   background: var(--accent-gradient, linear-gradient(135deg, #a855f7, #7c3aed));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: clamp(0.85rem, 1.8vh, 1.05rem);
   flex-shrink: 0;
   box-shadow: 0 0 15px var(--card-border, rgba(168, 85, 247, 0.3));
 }
 .sys-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
 }
 .sys-text strong {
-  font-size: 0.95rem;
+  font-size: clamp(0.82rem, 1.7vh, 0.94rem);
   font-weight: 600;
   color: #fff;
+  line-height: 1.3;
 }
 .sys-text span {
-  font-size: 0.82rem;
+  font-size: clamp(0.72rem, 1.4vh, 0.82rem);
   color: var(--text-muted, #9b97b8);
-  line-height: 1.5;
+  line-height: 1.35;
 }
 
 /* Suggestion Grid (Fluid Auto-Fit for Mobile, Tablet, Desktop & Desktop-Mode) */
 .suggestion-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: clamp(8px, 1.4vh, 12px);
   width: 100%;
   box-sizing: border-box;
 }
 .sugg-card {
   background: var(--panel-bg, rgba(20, 15, 45, 0.6));
   border: 1px solid var(--panel-border, rgba(255, 255, 255, 0.1));
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: clamp(10px, 1.6vh, 14px);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   backdrop-filter: blur(12px);
@@ -1104,29 +1112,29 @@ select option { background-color: #111 !important; }
   box-shadow: 0 8px 24px rgba(0,0,0,0.45);
 }
 .sugg-icon {
-  width: 36px;
-  height: 36px;
+  width: clamp(28px, 3.6vh, 34px);
+  height: clamp(28px, 3.6vh, 34px);
   border-radius: 50%;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
-  margin-bottom: 12px;
+  font-size: clamp(0.85rem, 1.8vh, 1rem);
+  margin-bottom: clamp(6px, 1vh, 10px);
   color: var(--accent-primary, #a855f7);
   flex-shrink: 0;
 }
 .sugg-content h4 {
-  font-size: 0.95rem;
+  font-size: clamp(0.82rem, 1.7vh, 0.92rem);
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   color: var(--text-main);
 }
 .sugg-content p {
-  font-size: 0.82rem;
+  font-size: clamp(0.72rem, 1.4vh, 0.8rem);
   color: var(--text-muted, #9b97b8);
-  line-height: 1.4;
+  line-height: 1.35;
   margin: 0;
 }
 

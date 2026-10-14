@@ -401,6 +401,9 @@ function createBotActionsHtml() {
 
 function appendMsg(who, text, emoji, imageUrl) {
   const box = document.getElementById('messages');
+  const hero = document.getElementById('heroState');
+  if (hero) hero.style.display = 'none';
+  if (box) box.style.display = 'flex';
   const welcome = document.getElementById('welcomeMsg');
   if (welcome && who === 'user') {
     welcome.remove();
@@ -462,14 +465,15 @@ setInterval(pollAnnouncements, 2000);
 
 function renderMessages() {
   const box = document.getElementById('messages');
-  box.innerHTML = '';
+  const hero = document.getElementById('heroState');
+  if (box) box.innerHTML = '';
   if (!chatHistory.length) {
-    const welcome = document.createElement('div');
-    welcome.className = 'msg bot';
-    welcome.innerHTML = `<div class="avatar bot-av">✦</div><div class="bubble bot-bubble" id="welcomeMsg">System initialized. I am <strong>Mikey</strong>. Standing by for your directive.<br><br><span style="color:var(--text-muted);font-size:0.92em;">⚙ Layout synchronization complete. The Neural Link panel now fills the available viewport height, the command bar is anchored to the bottom, and all three dashboard columns are vertically aligned.</span></div>`;
-    box.appendChild(welcome);
+    if (hero) hero.style.display = 'flex';
+    if (box) box.style.display = 'none';
     return;
   }
+  if (hero) hero.style.display = 'none';
+  if (box) box.style.display = 'flex';
   chatHistory.forEach(msg => {
     appendMsg(msg.role === 'user' ? 'user' : 'bot', msg.content, msg.role === 'user' ? '❖' : '✦', msg.image_url);
   });
